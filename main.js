@@ -48,12 +48,24 @@ function setTurn() {
 function move(elementId) {
     elementId = window.event;
     target = elementId.target;
-    target.innerHTML = `<h2>${turn}</h2>`;
-    board.set(target.id, turn);
-    moves++
-    checkWinner();
-    checkStalemate(winner, moves);
-    updateTurn();
+    let selection = target.id
+    if (board.get(selection.toString()) === 'X') {
+        console.log('Invalid move!');
+        console.log(board.get(selection.toString()))
+    }
+    else if (board.get(selection.toString()) === 'O') {
+        console.log('Invalid move!');
+        console.log(board.get(selection.toString()))
+    }
+    else {
+        board.set(selection, turn);
+        console.log(`Valid move. ${selection}, ${turn}`);
+        target.innerHTML = `${turn}`;
+        moves++
+        checkWinner();
+        checkStalemate(winner, moves);
+        updateTurn();
+    }
 }
 
 // Updates the turn when a player makes a move.
