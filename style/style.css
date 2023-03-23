@@ -1,0 +1,49 @@
+#gameBoard {
+    display: flex;
+    flex-wrap: wrap;
+    width: 600px;
+}
+
+.cell {
+    flex: 0 0 33%;
+    height: 200px;
+    width: 200px;
+    border: 1px solid black;
+}
+
+.top {
+    border-top: none;
+}
+
+.bot {
+    border-bottom: none;
+}
+
+.lEdge {
+    border-left: none;
+}
+
+.rEdge {
+    border-right: none;
+}
+
+section h2 {
+    font-size: 50px;
+    text-align: center;
+    padding: 50px;
+}
+
+.winner {
+    color: red;
+}
+
+.stalemate {
+    color: blue;
+}
+
+button {
+    margin: 5px 0;
+    background: slategray;
+    color: white;
+    text-transform: uppercase;
+}
