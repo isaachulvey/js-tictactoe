@@ -18,16 +18,8 @@ let winner = false;
 let moves = 0;
 
 // Sets up event listeners for each cell
-// Maybe there's a more efficient way to do this?
-document.getElementById('1').addEventListener('click', move)
-document.getElementById('2').addEventListener('click', move)
-document.getElementById('3').addEventListener('click', move)
-document.getElementById('4').addEventListener('click', move)
-document.getElementById('5').addEventListener('click', move)
-document.getElementById('6').addEventListener('click', move)
-document.getElementById('7').addEventListener('click', move)
-document.getElementById('8').addEventListener('click', move)
-document.getElementById('9').addEventListener('click', move)
+const cells = document.querySelectorAll('.cell')
+Array.from(cells).forEach(element => element.addEventListener('click', move))
 
 // Notify players who goes first.
 const msg = document.querySelector('#msg');
@@ -138,8 +130,9 @@ function checkWinner() {
     }
 }
 
+// Since a maximum of 9 moves are possible, if 9 moves have been played and neither player
+// has won, we announce the game is a stalemate.
 function checkStalemate(winner, moves) {
-    // Loops through the board Map to see if all 9 values are X or O and winner is false, then stalemate
     if (winner === false && moves === 9) {
         msg.classList.add('stalemate');
         msg.innerHTML = 'Stalemate!';
