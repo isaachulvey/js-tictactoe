@@ -105,4 +105,27 @@ describe('TicTacToe Logic', () => {
         expect(result.success).toBe(false);
         expect(result.message).toBe('Game is over');
     });
+
+    it('should return available moves', () => {
+        game.makeMove('1');
+        game.makeMove('2');
+        const available = game.getAvailableMoves();
+        expect(available).toHaveLength(7);
+        expect(available).not.toContain('1');
+        expect(available).not.toContain('2');
+        expect(available).toContain('3');
+    });
+
+    it('should initialize AI mode correctly', () => {
+        game.setAiMode(true);
+        expect(game.isAiMode).toBe(true);
+        expect(['X', 'O']).toContain(game.humanPlayer);
+    });
+
+    it('should reset AI mode correctly', () => {
+        game.setAiMode(true);
+        game.setAiMode(false);
+        expect(game.isAiMode).toBe(false);
+        expect(game.humanPlayer).toBe(null);
+    });
 });

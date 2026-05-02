@@ -9,10 +9,21 @@ export class TicTacToe {
         this.winner = false;
         this.moves = 0;
         this.isGameOver = false;
+        this.isAiMode = false;
+        this.humanPlayer = null;
     }
 
     getRandomTurn() {
         return Math.floor(Math.random() * 2) === 0 ? "X" : "O";
+    }
+
+    setAiMode(enabled) {
+        this.isAiMode = enabled;
+        if (enabled) {
+            this.humanPlayer = this.getRandomTurn();
+        } else {
+            this.humanPlayer = null;
+        }
     }
 
     makeMove(selection) {
@@ -65,5 +76,15 @@ export class TicTacToe {
             }
         }
         return false;
+    }
+
+    getAvailableMoves() {
+        const available = [];
+        for (const [key, value] of this.board.entries()) {
+            if (value !== 'X' && value !== 'O') {
+                available.push(key);
+            }
+        }
+        return available;
     }
 }

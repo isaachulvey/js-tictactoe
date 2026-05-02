@@ -6,20 +6,57 @@ const game = new TicTacToe();
 const cells = document.querySelectorAll('.cell');
 Array.from(cells).forEach(element => element.addEventListener('click', move));
 
-// Notify players who goes first.
 const msg = document.querySelector('#msg');
-msg.innerHTML = `${game.turn} goes first!`;
+const aiToggle = document.querySelector('#aiToggle');
+
+aiToggle.addEventListener('click', toggleAi);
+
+updateMessage();
+
+function updateMessage() {
+    if (game.isAiMode) {
+        msg.innerHTML = `${game.turn} goes first! You are ${game.humanPlayer}.`;
+    } else {
+        msg.innerHTML = `${game.turn} goes first!`;
+    }
+}
+
+function toggleAi() {
+    if (game.moves > 0) return; // Prevent toggling during game
+
+    game.setAiMode(!game.isAiMode);
+    aiToggle.innerHTML = game.isAiMode ? "Play against Human" : "Play against AI";
+    updateMessage();
+
+    // If AI goes first
+    if (game.isAiMode && game.turn !== game.humanPlayer) {
+        triggerAiMove();
+    }
+}
 
 // Gets the ID of the cell that is clicked on
 function move(event) {
+    if (game.isAiMode && game.turn !== game.humanPlayer) return; // Prevent clicking during AI turn
+
     const target = event.target;
     const selection = target.id;
 
+    executeMove(selection, target);
+}
+
+function executeMove(selection, target) {
     const result = game.makeMove(selection);
 
     if (!result.success) {
         console.log(result.message);
         return;
+    }
+
+    // Lock AI toggle once game starts
+    if (game.moves === 1) {
+        aiToggle.disabled = true;
+        aiToggle.style.opacity = 0.5;
+        aiToggle.style.cursor = 'not-allowed';
     }
 
     console.log(`Valid move. ${result.selection}, ${result.turn}`);
@@ -33,7 +70,24 @@ function move(event) {
         msg.classList.add('stalemate');
         msg.innerHTML = 'Stalemate!';
         speak('Stalemate!');
+    } else {
+        // If it's AI mode and now it's AI's turn
+        if (game.isAiMode && game.turn !== game.humanPlayer) {
+            triggerAiMove();
+        }
     }
+}
+
+function triggerAiMove() {
+    setTimeout(() => {
+        const available = game.getAvailableMoves();
+        if (available.length > 0) {
+            const randomIndex = Math.floor(Math.random() * available.length);
+            const selection = available[randomIndex];
+            const target = document.getElementById(selection);
+            executeMove(selection, target);
+        }
+    }, 500);
 }
 
 function speak(announceWinner) {
