@@ -36,7 +36,7 @@ describe('TicTacToe Logic', () => {
         expect(game.turn).not.toBe(firstTurn);
     });
 
-    it('should detect a horizontal win', () => {
+    it('should detect a horizontal win and return the winning line', () => {
         // Force turn to X for predictable test
         game.turn = 'X';
         game.makeMove('1'); // X
@@ -46,6 +46,7 @@ describe('TicTacToe Logic', () => {
         const result = game.makeMove('3'); // X wins
 
         expect(result.winner).toBe('X');
+        expect(result.winningLine).toEqual(['1', '2', '3']);
         expect(game.isGameOver).toBe(true);
     });
 
@@ -104,5 +105,28 @@ describe('TicTacToe Logic', () => {
         const result = game.makeMove('6');
         expect(result.success).toBe(false);
         expect(result.message).toBe('Game is over');
+    });
+
+    it('should return available moves', () => {
+        game.makeMove('1');
+        game.makeMove('2');
+        const available = game.getAvailableMoves();
+        expect(available).toHaveLength(7);
+        expect(available).not.toContain('1');
+        expect(available).not.toContain('2');
+        expect(available).toContain('3');
+    });
+
+    it('should initialize AI mode correctly', () => {
+        game.setAiMode(true);
+        expect(game.isAiMode).toBe(true);
+        expect(['X', 'O']).toContain(game.humanPlayer);
+    });
+
+    it('should reset AI mode correctly', () => {
+        game.setAiMode(true);
+        game.setAiMode(false);
+        expect(game.isAiMode).toBe(false);
+        expect(game.humanPlayer).toBe(null);
     });
 });
