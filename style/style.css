@@ -1,37 +1,56 @@
-#gameBoard {
-    display: flex;
-    flex-wrap: wrap;
-    width: 600px;
+:root {
+    --board-size: min(600px, 90vw);
+    --cell-size: calc(var(--board-size) / 3);
 }
 
-.cell {
-    flex: 0 0 33%;
-    height: 200px;
-    width: 200px;
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+    margin: 10px 0;
+}
+
+h3 {
+    font-size: clamp(1rem, 3vw, 1.5rem);
+    min-height: 1.5em;
+}
+
+#gameBoard {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    width: var(--board-size);
+    height: var(--board-size);
     border: 1px solid black;
 }
 
-.top {
-    border-top: none;
+.cell {
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: calc(var(--cell-size) * 0.5);
+    cursor: pointer;
+    user-select: none;
 }
 
-.bot {
-    border-bottom: none;
-}
-
-.lEdge {
-    border-left: none;
-}
-
-.rEdge {
-    border-right: none;
-}
-
-section {
-    font-size: 50px;
-    text-align: center;
-    line-height: 200px;
-}
+/* Remove outer borders to maintain the original look */
+.top { border-top: none; }
+.bot { border-bottom: none; }
+.lEdge { border-left: none; }
+.rEdge { border-right: none; }
 
 .winner {
     color: red;
@@ -41,20 +60,46 @@ section {
     color: darkblue;
 }
 
+.controls {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 20px;
+    width: var(--board-size);
+    justify-content: center;
+}
+
 button {
-    margin: 5px 0;
+    padding: 10px 20px;
     background: slategray;
     color: white;
     text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    flex: 1;
+    max-width: 200px;
 }
 
 .win-highlight {
-    background-color: #e6e6fa; /* Light Lavender/Purple */
+    background-color: #e6e6fa;
     font-weight: bold;
-    animation: fadeIn 1s;
+    animation: fadeIn 1s forwards;
 }
 
 @keyframes fadeIn {
     0% { opacity: 0; }
     100% { opacity: 1; }
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+    .controls {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    button {
+        width: 100%;
+        max-width: none;
+    }
 }
