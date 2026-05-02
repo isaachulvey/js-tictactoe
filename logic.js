@@ -37,7 +37,8 @@ export class TicTacToe {
         this.board.set(selection.toString(), this.turn);
         this.moves++;
 
-        const win = this.checkWinner();
+        const winningLine = this.checkWinner();
+        const win = !!winningLine;
         const stalemate = !win && this.moves === 9;
 
         const result = {
@@ -45,6 +46,7 @@ export class TicTacToe {
             selection,
             turn: this.turn,
             winner: win ? this.turn : null,
+            winningLine: winningLine || null,
             stalemate: stalemate
         };
 
@@ -72,10 +74,10 @@ export class TicTacToe {
         for (const combo of winningCombinations) {
             if (this.board.get(combo[0]) === this.board.get(combo[1]) &&
                 this.board.get(combo[0]) === this.board.get(combo[2])) {
-                return true;
+                return combo;
             }
         }
-        return false;
+        return null;
     }
 
     getAvailableMoves() {

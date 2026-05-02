@@ -66,6 +66,11 @@ function executeMove(selection, target) {
         msg.classList.add('winner');
         msg.innerHTML = `${result.winner} wins!`;
         speak(`${result.winner} wins!`);
+        if (result.winningLine) {
+            result.winningLine.forEach(id => {
+                document.getElementById(id).classList.add('win-highlight');
+            });
+        }
     } else if (result.stalemate) {
         msg.classList.add('stalemate');
         msg.innerHTML = 'Stalemate!';
