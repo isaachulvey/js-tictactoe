@@ -10,19 +10,25 @@
 <body>
 <header>
     <h1>Welcome to Tic Tac Toe!</h1>
-    <h3 id="msg"></h3>
+    <h3 id="msg" aria-live="polite"></h3>
 </header>
 
-<main id="gameBoard">
-    <section id="1" class="cell top lEdge"></section>
-    <section id="2" class="cell top"></section>
-    <section id="3" class="cell top rEdge"></section>
-    <section id="4" class="cell lEdge"></section>
-    <section id="5" class="cell"></section>
-    <section id="6" class="cell rEdge"></section>
-    <section id="7" class="cell bot lEdge"></section>
-    <section id="8" class="cell bot"></section>
-    <section id="9" class="cell bot rEdge"></section>
+<main id="gameBoard" role="grid" aria-label="Tic Tac Toe Board">
+    <div role="row">
+        <button id="1" class="cell top lEdge" aria-label="Cell 1"></button>
+        <button id="2" class="cell top" aria-label="Cell 2"></button>
+        <button id="3" class="cell top rEdge" aria-label="Cell 3"></button>
+    </div>
+    <div role="row">
+        <button id="4" class="cell lEdge" aria-label="Cell 4"></button>
+        <button id="5" class="cell" aria-label="Cell 5"></button>
+        <button id="6" class="cell rEdge" aria-label="Cell 6"></button>
+    </div>
+    <div role="row">
+        <button id="7" class="cell bot lEdge" aria-label="Cell 7"></button>
+        <button id="8" class="cell bot" aria-label="Cell 8"></button>
+        <button id="9" class="cell bot rEdge" aria-label="Cell 9"></button>
+    </div>
 </main>
     <div class="controls">
         <button id="reset" onclick="reset()">Reset</button>

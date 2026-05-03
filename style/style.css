@@ -59,15 +59,20 @@ h3 {
 }
 
 #gameBoard {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
+    display: flex;
+    flex-direction: column;
     width: var(--board-size);
     height: var(--board-size);
     border: 1px solid var(--border-color);
 }
 
+[role="row"] {
+    display: flex;
+    flex: 1;
+}
+
 .cell {
+    flex: 1;
     border: 1px solid var(--border-color);
     display: flex;
     justify-content: center;
@@ -76,6 +81,16 @@ h3 {
     cursor: pointer;
     user-select: none;
     transition: background-color 0.5s ease;
+    background: transparent;
+    color: inherit;
+    font-family: inherit;
+    padding: 0;
+}
+
+.cell:focus-visible {
+    outline: 3px solid var(--msg-stalemate);
+    outline-offset: -3px;
+    z-index: 1;
 }
 
 /* Remove outer borders to maintain the original look */
@@ -102,7 +117,7 @@ h3 {
     flex-wrap: wrap;
 }
 
-button {
+.controls button {
     padding: 10px 20px;
     background: var(--btn-bg);
     color: var(--btn-text);
