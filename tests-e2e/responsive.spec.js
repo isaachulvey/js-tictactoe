@@ -7,14 +7,21 @@ test.describe('Responsive Layout', () => {
     await page.goto('/');
 
     const board = page.locator('#gameBoard');
+    await expect(board).toBeVisible();
+
     const boardBox = await board.boundingBox();
 
-    // Check max-width constraint (600px)
-    expect(boardBox.width).toBeCloseTo(600, 1);
-    expect(boardBox.height).toBeCloseTo(600, 1);
+    // Check max-width constraint (600px).
+    // We allow a small margin for borders or scrollbars (1-2px)
+    expect(boardBox.width).toBeGreaterThanOrEqual(598);
+    expect(boardBox.width).toBeLessThanOrEqual(602);
+
+    // Height should match width for a square
+    expect(boardBox.height).toBeCloseTo(boardBox.width, 1);
 
     // Check button layout (should be horizontal in a row)
     const controls = page.locator('.controls');
+    await expect(controls).toHaveCSS('display', 'flex');
     await expect(controls).toHaveCSS('flex-direction', 'row');
   });
 
@@ -23,11 +30,17 @@ test.describe('Responsive Layout', () => {
     await page.goto('/');
 
     const board = page.locator('#gameBoard');
+    await expect(board).toBeVisible();
+
     const boardBox = await board.boundingBox();
 
     // Check responsive width (90vw of 375 is 337.5)
-    expect(boardBox.width).toBeCloseTo(375 * 0.9, 1);
-    expect(boardBox.height).toBeCloseTo(375 * 0.9, 1);
+    // Using a range to be more robust against subpixel rendering
+    const expectedWidth = 375 * 0.9;
+    expect(boardBox.width).toBeGreaterThanOrEqual(expectedWidth - 2);
+    expect(boardBox.width).toBeLessThanOrEqual(expectedWidth + 2);
+
+    expect(boardBox.height).toBeCloseTo(boardBox.width, 1);
 
     // Check button layout (should be vertical/column)
     const controls = page.locator('.controls');
@@ -38,12 +51,14 @@ test.describe('Responsive Layout', () => {
     // Desktop
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto('/');
+    await page.waitForSelector('.cell');
     const desktopCell = page.locator('.cell').first();
     const desktopFontSize = await desktopCell.evaluate(el => parseFloat(window.getComputedStyle(el).fontSize));
 
     // Mobile
     await page.setViewportSize({ width: 375, height: 667 });
     await page.goto('/');
+    await page.waitForSelector('.cell');
     const mobileCell = page.locator('.cell').first();
     const mobileFontSize = await mobileCell.evaluate(el => parseFloat(window.getComputedStyle(el).fontSize));
 

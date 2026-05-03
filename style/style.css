@@ -3,6 +3,10 @@
     --cell-size: calc(var(--board-size) / 3);
 }
 
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 body {
     display: flex;
     flex-direction: column;
