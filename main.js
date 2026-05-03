@@ -76,6 +76,8 @@ function executeMove(selection, target) {
 
     console.log(`Valid move. ${result.selection}, ${result.turn}`);
     target.innerHTML = result.turn;
+    target.disabled = true;
+    target.setAttribute('aria-label', `Cell ${result.selection}, ${result.turn}`);
 
     if (result.winner) {
         msg.classList.add('winner');
@@ -116,5 +118,27 @@ function speak(announceWinner) {
 }
 
 window.reset = function() {
-    window.location.reload();
+    game.reset();
+
+    // Reset message
+    msg.classList.remove('winner', 'stalemate');
+    updateMessage();
+
+    // Reset board UI
+    cells.forEach(cell => {
+        cell.innerHTML = '';
+        cell.disabled = false;
+        cell.classList.remove('win-highlight');
+        cell.setAttribute('aria-label', `Cell ${cell.id}`);
+    });
+
+    // Re-enable AI toggle if no moves made yet (game.reset resets moves to 0)
+    aiToggle.disabled = false;
+    aiToggle.style.opacity = 1;
+    aiToggle.style.cursor = 'pointer';
+
+    // If AI goes first in AI mode
+    if (game.isAiMode && game.turn !== game.humanPlayer) {
+        triggerAiMove();
+    }
 };
