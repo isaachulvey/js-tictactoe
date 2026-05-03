@@ -1,6 +1,30 @@
 :root {
     --board-size: min(600px, 90vw);
     --cell-size: calc(var(--board-size) / 3);
+
+    /* Light Theme (Default) */
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --border-color: #000000;
+    --btn-bg: slategray;
+    --btn-text: #ffffff;
+    --win-bg: #e6e6fa;
+    --win-text: #000000;
+    --msg-winner: red;
+    --msg-stalemate: darkblue;
+}
+
+.dark-theme {
+    /* Dracula Palette */
+    --bg-color: #282a36;
+    --text-color: #f8f8f2;
+    --border-color: #6272a4;
+    --btn-bg: #44475a;
+    --btn-text: #f8f8f2;
+    --win-bg: #6272a4; /* Dracula Muted Blue/Purple for background */
+    --win-text: #50fa7b; /* Dracula Green for winning marks */
+    --msg-winner: #ff5555; /* Dracula Red */
+    --msg-stalemate: #8be9fd; /* Dracula Cyan */
 }
 
 *, *::before, *::after {
@@ -14,6 +38,9 @@ body {
     font-family: sans-serif;
     margin: 0;
     padding: 20px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
 }
 
 header {
@@ -37,17 +64,18 @@ h3 {
     grid-template-rows: repeat(3, 1fr);
     width: var(--board-size);
     height: var(--board-size);
-    border: 1px solid black;
+    border: 1px solid var(--border-color);
 }
 
 .cell {
-    border: 1px solid black;
+    border: 1px solid var(--border-color);
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: calc(var(--cell-size) * 0.5);
     cursor: pointer;
     user-select: none;
+    transition: background-color 0.5s ease;
 }
 
 /* Remove outer borders to maintain the original look */
@@ -57,11 +85,11 @@ h3 {
 .rEdge { border-right: none; }
 
 .winner {
-    color: red;
+    color: var(--msg-winner);
 }
 
 .stalemate {
-    color: darkblue;
+    color: var(--msg-stalemate);
 }
 
 .controls {
@@ -71,28 +99,26 @@ h3 {
     margin-top: 20px;
     width: var(--board-size);
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 button {
     padding: 10px 20px;
-    background: slategray;
-    color: white;
+    background: var(--btn-bg);
+    color: var(--btn-text);
     text-transform: uppercase;
     border: none;
     cursor: pointer;
     flex: 1;
-    max-width: 200px;
+    min-width: 150px;
+    max-width: 250px;
+    transition: background-color 0.3s;
 }
 
 .win-highlight {
-    background-color: #e6e6fa;
+    background-color: var(--win-bg) !important;
+    color: var(--win-text) !important;
     font-weight: bold;
-    animation: fadeIn 1s forwards;
-}
-
-@keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
 }
 
 /* Mobile adjustments */

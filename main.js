@@ -8,8 +8,17 @@ Array.from(cells).forEach(element => element.addEventListener('click', move));
 
 const msg = document.querySelector('#msg');
 const aiToggle = document.querySelector('#aiToggle');
+const themeToggle = document.querySelector('#themeToggle');
 
 aiToggle.addEventListener('click', toggleAi);
+themeToggle.addEventListener('click', toggleTheme);
+
+// Initialize theme from localStorage
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'dark') {
+    document.body.classList.add('dark-theme');
+    themeToggle.innerHTML = "Light Mode";
+}
 
 updateMessage();
 
@@ -32,6 +41,12 @@ function toggleAi() {
     if (game.isAiMode && game.turn !== game.humanPlayer) {
         triggerAiMove();
     }
+}
+
+function toggleTheme() {
+    const isDark = document.body.classList.toggle('dark-theme');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    themeToggle.innerHTML = isDark ? "Light Mode" : "Dark Mode";
 }
 
 // Gets the ID of the cell that is clicked on
