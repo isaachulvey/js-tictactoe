@@ -66,6 +66,33 @@ test.describe('Responsive Layout', () => {
   });
 });
 
+test.describe('Themes', () => {
+  test('Dark mode toggle and persistence', async ({ page }) => {
+    await page.goto('/');
+
+    // Check default light mode background (white-ish)
+    const body = page.locator('body');
+    await expect(body).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+
+    // Toggle dark mode
+    const themeToggle = page.locator('#themeToggle');
+    await themeToggle.click();
+
+    // Check dark mode background (Dracula #282a36 -> rgb(40, 42, 54))
+    await expect(body).toHaveCSS('background-color', 'rgb(40, 42, 54)');
+    await expect(themeToggle).toHaveText('Light Mode');
+
+    // Reload and check persistence
+    await page.reload();
+    await expect(body).toHaveCSS('background-color', 'rgb(40, 42, 54)');
+    await expect(themeToggle).toHaveText('Light Mode');
+
+    // Toggle back
+    await themeToggle.click();
+    await expect(body).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+  });
+});
+
 test.describe('Game Logic E2E', () => {
   test('Win detection and highlighting', async ({ page }) => {
     await page.goto('/');
