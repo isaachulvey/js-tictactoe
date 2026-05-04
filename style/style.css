@@ -59,12 +59,16 @@ h3 {
 }
 
 #gameBoard {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
+    display: flex;
+    flex-direction: column;
     width: var(--board-size);
     height: var(--board-size);
     border: 1px solid var(--border-color);
+}
+
+#gameBoard [role="row"] {
+    display: flex;
+    flex: 1;
 }
 
 .cell {
@@ -75,7 +79,23 @@ h3 {
     font-size: calc(var(--cell-size) * 0.5);
     cursor: pointer;
     user-select: none;
-    transition: background-color 0.5s ease;
+    transition: background-color 0.3s ease;
+    flex: 1;
+    background: none;
+    min-width: 0;
+    max-width: none;
+    text-transform: none;
+    border-radius: 0;
+    color: var(--text-color);
+}
+
+.cell:hover:not(:disabled) {
+    background-color: rgba(128, 128, 128, 0.1);
+}
+
+.cell:focus-visible {
+    outline: 3px solid var(--btn-bg);
+    outline-offset: -3px;
 }
 
 /* Remove outer borders to maintain the original look */
