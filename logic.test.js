@@ -19,7 +19,7 @@ describe('TicTacToe Logic', () => {
         const result = game.makeMove('1');
         expect(result.success).toBe(true);
         expect(result.turn).toBe(turn);
-        expect(game.board.get('1')).toBe(turn);
+        expect(game.board[0]).toBe(turn);
         expect(game.moves).toBe(1);
     });
 
