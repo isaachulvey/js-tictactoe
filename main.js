@@ -2,9 +2,13 @@ import { TicTacToe } from './logic.js';
 
 const game = new TicTacToe();
 
-// Sets up event listeners for each cell
+// Optimization: Cache DOM elements to avoid repeated lookups
+const cellElements = {};
 const cells = document.querySelectorAll('.cell');
-Array.from(cells).forEach(element => element.addEventListener('click', move));
+cells.forEach(element => {
+    cellElements[element.id] = element;
+    element.addEventListener('click', move);
+});
 
 const msg = document.querySelector('#msg');
 const aiToggle = document.querySelector('#aiToggle');
@@ -74,7 +78,6 @@ function executeMove(selection, target) {
         aiToggle.style.cursor = 'not-allowed';
     }
 
-    console.log(`Valid move. ${result.selection}, ${result.turn}`);
     target.innerHTML = result.turn;
 
     if (result.winner) {
@@ -83,7 +86,7 @@ function executeMove(selection, target) {
         speak(`${result.winner} wins!`);
         if (result.winningLine) {
             result.winningLine.forEach(id => {
-                document.getElementById(id).classList.add('win-highlight');
+                cellElements[id].classList.add('win-highlight');
             });
         }
     } else if (result.stalemate) {
@@ -104,17 +107,42 @@ function triggerAiMove() {
         if (available.length > 0) {
             const randomIndex = Math.floor(Math.random() * available.length);
             const selection = available[randomIndex];
-            const target = document.getElementById(selection);
+            const target = cellElements[selection];
             executeMove(selection, target);
         }
     }, 500);
 }
 
 function speak(announceWinner) {
-    const utterance = new SpeechSynthesisUtterance(announceWinner);
-    window.speechSynthesis.speak(utterance);
+    // Check if SpeechSynthesis is supported
+    if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(announceWinner);
+        window.speechSynthesis.speak(utterance);
+    }
 }
 
+/**
+ * Performance Optimization: Soft Reset.
+ * Instead of window.location.reload(), we manually clear the state.
+ * This avoids re-downloading assets and re-parsing scripts.
+ */
 window.reset = function() {
-    window.location.reload();
+    // Reset game logic
+    game.reset();
+
+    // Reset UI
+    Object.values(cellElements).forEach(cell => {
+        cell.innerHTML = '';
+        cell.classList.remove('win-highlight');
+    });
+
+    msg.innerHTML = '';
+    msg.classList.remove('winner', 'stalemate');
+    updateMessage();
+
+    // Re-enable AI toggle and reset its text
+    aiToggle.disabled = false;
+    aiToggle.style.opacity = 1;
+    aiToggle.style.cursor = 'pointer';
+    aiToggle.innerHTML = "Play against AI";
 };
