@@ -1,0 +1,3 @@
+## 2025-05-15 - [Accessibility & Soft Reset]
+**Learning:** Transitioning from a simple `location.reload()` to a soft reset improves UX by avoiding jarring page flickers, but requires careful manual state management for all DOM elements and ARIA attributes. Using a semantic ARIA grid (`role="grid"`, `role="row"`, `button` for cells) is critical for making Tic Tac Toe accessible to keyboard and screen reader users.
+**Action:** Always prefer semantic HTML and ARIA roles for custom game boards. When implementing soft resets, ensure a thorough reset of all interactive states (disabled, aria-labels, etc.).

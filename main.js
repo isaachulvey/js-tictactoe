@@ -76,6 +76,8 @@ function executeMove(selection, target) {
 
     console.log(`Valid move. ${result.selection}, ${result.turn}`);
     target.innerHTML = result.turn;
+    target.setAttribute('aria-label', `Cell ${selection}, ${result.turn}`);
+    target.disabled = true;
 
     if (result.winner) {
         msg.classList.add('winner');
@@ -116,5 +118,38 @@ function speak(announceWinner) {
 }
 
 window.reset = function() {
-    window.location.reload();
+    // Soft reset logic
+    game.board = new Map([
+        ['1', 'a'], ['2', 'b'], ['3', 'c'],
+        ['4', 'd'], ['5', 'e'], ['6', 'f'],
+        ['7', 'g'], ['8', 'h'], ['9', 'i'],
+    ]);
+    game.turn = game.getRandomTurn();
+    game.winner = false;
+    game.moves = 0;
+    game.isGameOver = false;
+    // Keep isAiMode as is, but re-randomize human player if in AI mode
+    if (game.isAiMode) {
+        game.humanPlayer = game.getRandomTurn();
+    }
+
+    // Reset DOM
+    msg.classList.remove('winner', 'stalemate');
+    updateMessage();
+
+    cells.forEach(cell => {
+        cell.innerHTML = '';
+        cell.disabled = false;
+        cell.classList.remove('win-highlight');
+        cell.setAttribute('aria-label', `Cell ${cell.id}, empty`);
+    });
+
+    aiToggle.disabled = false;
+    aiToggle.style.opacity = 1;
+    aiToggle.style.cursor = 'pointer';
+
+    // If AI goes first in the new game
+    if (game.isAiMode && game.turn !== game.humanPlayer) {
+        triggerAiMove();
+    }
 };
