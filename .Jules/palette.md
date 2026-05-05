@@ -1,0 +1,3 @@
+## 2025-05-15 - [Improving Board Accessibility and Feedback]
+**Learning:** Converting non-semantic interactive elements (like `section` or `div`) to semantic `button` elements significantly improves keyboard accessibility and screen reader support out-of-the-box. When doing so, it's critical to ensure the `button`'s default styling (like `min-width` or `text-transform`) doesn't interfere with the layout, especially in flex or grid systems on mobile.
+**Action:** Always prefer semantic HTML elements for interactions and explicitly reset button styles that might conflict with the design system or layout constraints.
