@@ -1,0 +1,3 @@
+## 2025-05-15 - [Array vs Map for small fixed-size boards]
+**Learning:** Using a `Map` for a small, fixed-size dataset like a 3x3 Tic-Tac-Toe board introduces unnecessary overhead. A flat `Array` with direct index access is significantly faster (~3x faster in `checkWinner` benchmarks) and reduces memory pressure by avoiding object/map instantiation per game if not careful, and more importantly, faster lookups. Moving constant lookup data like `winningCombinations` to a `static` property also avoids redundant allocations.
+**Action:** Always prefer flat arrays or typed arrays for small, fixed-size grid-based games or mathematical computations. Use static properties for constants.
