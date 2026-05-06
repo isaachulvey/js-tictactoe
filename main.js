@@ -76,6 +76,8 @@ function executeMove(selection, target) {
 
     console.log(`Valid move. ${result.selection}, ${result.turn}`);
     target.innerHTML = result.turn;
+    target.setAttribute('aria-label', `Cell ${selection}, marked with ${result.turn}`);
+    target.disabled = true;
 
     if (result.winner) {
         msg.classList.add('winner');
@@ -86,6 +88,7 @@ function executeMove(selection, target) {
                 document.getElementById(id).classList.add('win-highlight');
             });
         }
+        cells.forEach(cell => cell.disabled = true);
     } else if (result.stalemate) {
         msg.classList.add('stalemate');
         msg.innerHTML = 'Stalemate!';
@@ -116,5 +119,24 @@ function speak(announceWinner) {
 }
 
 window.reset = function() {
-    window.location.reload();
+    game.reset();
+
+    msg.classList.remove('winner', 'stalemate');
+    updateMessage();
+
+    cells.forEach(cell => {
+        cell.innerHTML = '';
+        cell.disabled = false;
+        cell.setAttribute('aria-label', `Cell ${cell.id}, empty`);
+        cell.classList.remove('win-highlight');
+    });
+
+    aiToggle.disabled = false;
+    aiToggle.style.opacity = 1;
+    aiToggle.style.cursor = 'pointer';
+
+    // If AI goes first
+    if (game.isAiMode && game.turn !== game.humanPlayer) {
+        triggerAiMove();
+    }
 };

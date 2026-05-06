@@ -76,6 +76,21 @@ h3 {
     cursor: pointer;
     user-select: none;
     transition: background-color 0.5s ease;
+    background: transparent;
+    color: var(--text-color);
+    padding: 0;
+    min-width: 0;
+    max-width: none;
+    text-transform: none;
+}
+
+.cell:hover:not(:disabled) {
+    background-color: rgba(128, 128, 128, 0.1);
+}
+
+.cell:focus-visible {
+    outline: 3px solid var(--btn-bg);
+    outline-offset: -3px;
 }
 
 /* Remove outer borders to maintain the original look */
