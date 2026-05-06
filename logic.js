@@ -1,10 +1,14 @@
 export class TicTacToe {
+    // Optimization: Use a static property for winning combinations to avoid re-creating the array in every checkWinner call
+    static winningCombinations = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Cols
+        [0, 4, 8], [2, 4, 6]             // Diagonals
+    ];
+
     constructor() {
-        this.board = new Map([
-            ['1', 'a'], ['2', 'b'], ['3', 'c'],
-            ['4', 'd'], ['5', 'e'], ['6', 'f'],
-            ['7', 'g'], ['8', 'h'], ['9', 'i'],
-        ]);
+        // Optimization: Use a flat array instead of a Map for better performance in access and iteration
+        this.board = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'];
         this.turn = this.getRandomTurn();
         this.winner = false;
         this.moves = 0;
@@ -29,24 +33,29 @@ export class TicTacToe {
     makeMove(selection) {
         if (this.isGameOver) return { success: false, message: 'Game is over' };
 
-        const currentVal = this.board.get(selection.toString());
+        // Convert selection (1-9) to 0-8 index
+        const index = parseInt(selection) - 1;
+        const currentVal = this.board[index];
         if (currentVal === 'X' || currentVal === 'O') {
             return { success: false, message: 'Invalid move!' };
         }
 
-        this.board.set(selection.toString(), this.turn);
+        this.board[index] = this.turn;
         this.moves++;
 
-        const winningLine = this.checkWinner();
-        const win = !!winningLine;
+        const winningLineIndices = this.checkWinner();
+        const win = !!winningLineIndices;
         const stalemate = !win && this.moves === 9;
+
+        // Map indices back to '1'-'9' for UI compatibility
+        const winningLine = winningLineIndices ? winningLineIndices.map(idx => (idx + 1).toString()) : null;
 
         const result = {
             success: true,
             selection,
             turn: this.turn,
             winner: win ? this.turn : null,
-            winningLine: winningLine || null,
+            winningLine: winningLine,
             stalemate: stalemate
         };
 
@@ -65,15 +74,13 @@ export class TicTacToe {
     }
 
     checkWinner() {
-        const winningCombinations = [
-            ['1', '2', '3'], ['4', '5', '6'], ['7', '8', '9'], // Rows
-            ['1', '4', '7'], ['2', '5', '8'], ['3', '6', '9'], // Cols
-            ['1', '5', '9'], ['3', '5', '7']                // Diagonals
-        ];
-
-        for (const combo of winningCombinations) {
-            if (this.board.get(combo[0]) === this.board.get(combo[1]) &&
-                this.board.get(combo[0]) === this.board.get(combo[2])) {
+        const board = this.board;
+        const combinations = TicTacToe.winningCombinations;
+        // Optimization: Use a loop and direct array access for maximum speed
+        for (let i = 0; i < combinations.length; i++) {
+            const combo = combinations[i];
+            if (board[combo[0]] === board[combo[1]] &&
+                board[combo[0]] === board[combo[2]]) {
                 return combo;
             }
         }
@@ -82,9 +89,11 @@ export class TicTacToe {
 
     getAvailableMoves() {
         const available = [];
-        for (const [key, value] of this.board.entries()) {
+        for (let i = 0; i < 9; i++) {
+            const value = this.board[i];
             if (value !== 'X' && value !== 'O') {
-                available.push(key);
+                // Map back to '1'-'9' strings for UI compatibility
+                available.push((i + 1).toString());
             }
         }
         return available;
