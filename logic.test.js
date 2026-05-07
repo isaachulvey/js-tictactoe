@@ -19,7 +19,7 @@ describe('TicTacToe Logic', () => {
         const result = game.makeMove('1');
         expect(result.success).toBe(true);
         expect(result.turn).toBe(turn);
-        expect(game.board.get('1')).toBe(turn);
+        expect(game.board[0]).toBe(turn);
         expect(game.moves).toBe(1);
     });
 
@@ -39,11 +39,11 @@ describe('TicTacToe Logic', () => {
     it('should detect a horizontal win and return the winning line', () => {
         // Force turn to X for predictable test
         game.turn = 'X';
-        game.makeMove('1'); // X
-        game.makeMove('4'); // O
-        game.makeMove('2'); // X
-        game.makeMove('5'); // O
-        const result = game.makeMove('3'); // X wins
+        game.makeMove('1'); // X (moves=1)
+        game.makeMove('4'); // O (moves=2)
+        game.makeMove('2'); // X (moves=3)
+        game.makeMove('5'); // O (moves=4)
+        const result = game.makeMove('3'); // X wins (moves=5)
 
         expect(result.winner).toBe('X');
         expect(result.winningLine).toEqual(['1', '2', '3']);
