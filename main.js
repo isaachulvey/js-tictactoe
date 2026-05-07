@@ -76,6 +76,7 @@ function executeMove(selection, target) {
 
     console.log(`Valid move. ${result.selection}, ${result.turn}`);
     target.innerHTML = result.turn;
+    target.setAttribute('aria-label', `Cell ${result.selection}, marked with ${result.turn}`);
 
     if (result.winner) {
         msg.classList.add('winner');
