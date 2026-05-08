@@ -1,10 +1,27 @@
 export class TicTacToe {
+    static WINNING_COMBINATIONS = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Cols
+        [0, 4, 8], [2, 4, 6]             // Diagonals
+    ];
+
     constructor() {
-        this.board = new Map([
-            ['1', 'a'], ['2', 'b'], ['3', 'c'],
-            ['4', 'd'], ['5', 'e'], ['6', 'f'],
-            ['7', 'g'], ['8', 'h'], ['9', 'i'],
-        ]);
+        // Internal board representation as a flat array for performance
+        this._board = Array(9).fill(null);
+
+        // Proxy to maintain backward compatibility with Map-based access
+        this.board = {
+            get: (key) => this._board[parseInt(key) - 1] || (['1','2','3','4','5','6','7','8','9'].includes(key) ? String.fromCharCode(96 + parseInt(key)) : undefined),
+            set: (key, value) => { this._board[parseInt(key) - 1] = value; },
+            entries: () => {
+                return ['1','2','3','4','5','6','7','8','9'].map(key => {
+                    const index = parseInt(key) - 1;
+                    const val = this._board[index] || String.fromCharCode(96 + parseInt(key));
+                    return [key, val];
+                })[Symbol.iterator]();
+            }
+        };
+
         this.turn = this.getRandomTurn();
         this.winner = false;
         this.moves = 0;
@@ -29,12 +46,13 @@ export class TicTacToe {
     makeMove(selection) {
         if (this.isGameOver) return { success: false, message: 'Game is over' };
 
-        const currentVal = this.board.get(selection.toString());
+        const index = parseInt(selection) - 1;
+        const currentVal = this._board[index];
         if (currentVal === 'X' || currentVal === 'O') {
             return { success: false, message: 'Invalid move!' };
         }
 
-        this.board.set(selection.toString(), this.turn);
+        this._board[index] = this.turn;
         this.moves++;
 
         const winningLine = this.checkWinner();
@@ -65,16 +83,16 @@ export class TicTacToe {
     }
 
     checkWinner() {
-        const winningCombinations = [
-            ['1', '2', '3'], ['4', '5', '6'], ['7', '8', '9'], // Rows
-            ['1', '4', '7'], ['2', '5', '8'], ['3', '6', '9'], // Cols
-            ['1', '5', '9'], ['3', '5', '7']                // Diagonals
-        ];
+        // Optimization: Cannot win with less than 5 moves
+        if (this.moves < 5) return null;
 
-        for (const combo of winningCombinations) {
-            if (this.board.get(combo[0]) === this.board.get(combo[1]) &&
-                this.board.get(combo[0]) === this.board.get(combo[2])) {
-                return combo;
+        for (const combo of TicTacToe.WINNING_COMBINATIONS) {
+            const [a, b, c] = combo;
+            if (this._board[a] &&
+                this._board[a] === this._board[b] &&
+                this._board[a] === this._board[c]) {
+                // Return original string IDs for UI compatibility
+                return combo.map(i => (i + 1).toString());
             }
         }
         return null;
@@ -82,9 +100,9 @@ export class TicTacToe {
 
     getAvailableMoves() {
         const available = [];
-        for (const [key, value] of this.board.entries()) {
-            if (value !== 'X' && value !== 'O') {
-                available.push(key);
+        for (let i = 0; i < this._board.length; i++) {
+            if (this._board[i] !== 'X' && this._board[i] !== 'O') {
+                available.push((i + 1).toString());
             }
         }
         return available;
