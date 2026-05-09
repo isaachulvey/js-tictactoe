@@ -76,6 +76,7 @@ function executeMove(selection, target) {
 
     console.log(`Valid move. ${result.selection}, ${result.turn}`);
     target.innerHTML = result.turn;
+    target.setAttribute('aria-label', `Cell ${result.selection}, marked with ${result.turn}`);
 
     if (result.winner) {
         msg.classList.add('winner');
@@ -116,5 +117,10 @@ function speak(announceWinner) {
 }
 
 window.reset = function() {
+    // Reset aria-labels for all cells
+    const cells = document.querySelectorAll('.cell');
+    cells.forEach(cell => {
+        cell.setAttribute('aria-label', `Cell ${cell.id}, empty`);
+    });
     window.location.reload();
 };
