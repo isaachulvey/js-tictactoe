@@ -1,0 +1,3 @@
+## 2025-05-15 - [In-place Reset & Array-based Board]
+**Learning:** Replacing `window.location.reload()` with an in-place reset provides a significantly faster user experience by avoiding full page re-parsing and asset re-loading. Additionally, using a flat array instead of a `Map` for small, fixed-size data structures like a Tic Tac Toe board reduces memory allocation and lookup overhead.
+**Action:** Prefer in-place state resets over page reloads when possible. Use arrays for small, fixed-size grids to optimize performance while using a `Proxy` if backward compatibility with a `Map` interface is required.

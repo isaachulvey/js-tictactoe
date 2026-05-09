@@ -115,6 +115,26 @@ function speak(announceWinner) {
     window.speechSynthesis.speak(utterance);
 }
 
+/**
+ * Perform an in-place reset of the game state and UI.
+ * This is faster and more efficient than a full page reload.
+ */
 window.reset = function() {
-    window.location.reload();
+    // Reset logic state
+    game.reset();
+
+    // Reset UI state
+    msg.innerHTML = '';
+    msg.className = ''; // Remove winner/stalemate classes
+    updateMessage();
+
+    cells.forEach(cell => {
+        cell.innerHTML = '';
+        cell.classList.remove('win-highlight');
+    });
+
+    aiToggle.disabled = false;
+    aiToggle.style.opacity = 1;
+    aiToggle.style.cursor = 'pointer';
+    aiToggle.innerHTML = "Play against AI"; // Reset to default state
 };
