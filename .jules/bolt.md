@@ -1,0 +1,3 @@
+## 2025-05-15 - In-place Reset Optimization
+**Learning:** Replacing `window.location.reload()` with an in-place state reset significantly improves perceived performance and reduces resource consumption. Re-instantiating the entire application lifecycle (DOM parsing, script evaluation, asset re-validation) for a simple state reset is an anti-pattern in modern SPAs.
+**Action:** Always prefer granular state management for "restart" actions over full page reloads. Ensure that all side effects (DOM classes, global listeners, session-persistent flags) are explicitly handled during the reset transition.
