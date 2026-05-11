@@ -116,5 +116,26 @@ function speak(announceWinner) {
 }
 
 window.reset = function() {
-    window.location.reload();
+    game.reset();
+
+    // Reset UI cells
+    const cells = document.querySelectorAll('.cell');
+    cells.forEach(cell => {
+        cell.innerHTML = '';
+        cell.classList.remove('win-highlight');
+    });
+
+    // Reset message
+    msg.classList.remove('winner', 'stalemate');
+    updateMessage();
+
+    // Re-enable AI toggle if it was disabled
+    aiToggle.disabled = false;
+    aiToggle.style.opacity = 1;
+    aiToggle.style.cursor = 'pointer';
+
+    // If AI mode is on and AI goes first after reset
+    if (game.isAiMode && game.turn !== game.humanPlayer) {
+        triggerAiMove();
+    }
 };
