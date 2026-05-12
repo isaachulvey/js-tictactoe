@@ -89,4 +89,17 @@ export class TicTacToe {
         }
         return available;
     }
+
+    reset() {
+        this.board = new Map([
+            ['1', 'a'], ['2', 'b'], ['3', 'c'],
+            ['4', 'd'], ['5', 'e'], ['6', 'f'],
+            ['7', 'g'], ['8', 'h'], ['9', 'i'],
+        ]);
+        this.turn = this.getRandomTurn();
+        this.winner = false;
+        this.moves = 0;
+        this.isGameOver = false;
+        // Keep isAiMode and humanPlayer as they were
+    }
 }

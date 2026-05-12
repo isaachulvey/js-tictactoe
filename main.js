@@ -76,6 +76,8 @@ function executeMove(selection, target) {
 
     console.log(`Valid move. ${result.selection}, ${result.turn}`);
     target.innerHTML = result.turn;
+    target.setAttribute('aria-label', `Cell ${result.selection}, marked with ${result.turn}`);
+    target.disabled = true;
 
     if (result.winner) {
         msg.classList.add('winner');
@@ -116,5 +118,26 @@ function speak(announceWinner) {
 }
 
 window.reset = function() {
-    window.location.reload();
+    game.reset();
+
+    // Clear UI state
+    Array.from(cells).forEach(cell => {
+        cell.innerHTML = "";
+        cell.setAttribute('aria-label', `Cell ${cell.id}, empty`);
+        cell.disabled = false;
+        cell.classList.remove('win-highlight');
+    });
+
+    msg.classList.remove('winner', 'stalemate');
+    updateMessage();
+
+    // Re-enable AI toggle
+    aiToggle.disabled = false;
+    aiToggle.style.opacity = 1;
+    aiToggle.style.cursor = 'pointer';
+
+    // If AI goes first in the new game
+    if (game.isAiMode && game.turn !== game.humanPlayer) {
+        triggerAiMove();
+    }
 };
