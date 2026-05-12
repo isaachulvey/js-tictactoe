@@ -1,0 +1,3 @@
+## 2025-05-12 - Improving Grid-Based Game Accessibility
+**Learning:** For grid-based games like Tic Tac Toe, using semantic `<button>` elements instead of generic `<div>` or `<section>` tags is crucial for keyboard accessibility. Combining this with dynamic `aria-label` updates provides a much better experience for screen reader users by clearly announcing the state of each cell (e.g., "Cell 1, marked with X").
+**Action:** Always prefer `<button>` for interactive grid cells and ensure they have descriptive ARIA labels that update with state changes. Ensure the reset functionality also restores these accessibility attributes.
