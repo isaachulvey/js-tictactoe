@@ -89,4 +89,8 @@ export class TicTacToe {
         }
         return available;
     }
+
+    reset() {
+        Object.assign(this, new TicTacToe());
+    }
 }

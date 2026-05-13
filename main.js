@@ -76,6 +76,8 @@ function executeMove(selection, target) {
 
     console.log(`Valid move. ${result.selection}, ${result.turn}`);
     target.innerHTML = result.turn;
+    target.setAttribute('aria-label', `Cell ${selection}, marked ${result.turn}`);
+    target.disabled = true;
 
     if (result.winner) {
         msg.classList.add('winner');
@@ -115,6 +117,14 @@ function speak(announceWinner) {
     window.speechSynthesis.speak(utterance);
 }
 
-window.reset = function() {
-    window.location.reload();
+window.reset = () => {
+    game.reset();
+    document.querySelectorAll('.cell').forEach(c => {
+        c.innerHTML = ''; c.classList.remove('win-highlight');
+        c.setAttribute('aria-label', `Cell ${c.id}, empty`); c.disabled = false;
+    });
+    msg.className = '';
+    aiToggle.disabled = false; aiToggle.style.cssText = '';
+    aiToggle.innerHTML = "Play against AI";
+    updateMessage();
 };
