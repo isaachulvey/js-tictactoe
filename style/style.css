@@ -69,6 +69,8 @@ h3 {
 
 .cell {
     border: 1px solid var(--border-color);
+    background: transparent;
+    color: var(--text-color);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -76,6 +78,20 @@ h3 {
     cursor: pointer;
     user-select: none;
     transition: background-color 0.5s ease;
+    padding: 0;
+    min-width: 0;
+    max-width: none;
+    text-transform: none;
+}
+
+.cell:focus-visible {
+    outline: 3px solid var(--btn-bg);
+    outline-offset: -3px;
+    background-color: rgba(121, 134, 203, 0.1);
+}
+
+.cell:disabled {
+    cursor: default;
 }
 
 /* Remove outer borders to maintain the original look */
