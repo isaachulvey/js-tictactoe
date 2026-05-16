@@ -1,6 +1,6 @@
 import { TicTacToe } from './logic.js';
 
-const game = new TicTacToe();
+let game = new TicTacToe();
 
 // Sets up event listeners for each cell
 const cells = document.querySelectorAll('.cell');
@@ -76,6 +76,8 @@ function executeMove(selection, target) {
 
     console.log(`Valid move. ${result.selection}, ${result.turn}`);
     target.innerHTML = result.turn;
+    target.setAttribute('aria-label', `Cell ${selection}, marked with ${result.turn}`);
+    target.disabled = true;
 
     if (result.winner) {
         msg.classList.add('winner');
@@ -116,5 +118,27 @@ function speak(announceWinner) {
 }
 
 window.reset = function() {
-    window.location.reload();
+    game = new TicTacToe();
+
+    // Reset UI
+    Array.from(cells).forEach(cell => {
+        cell.innerHTML = '';
+        cell.classList.remove('win-highlight');
+        cell.disabled = false;
+        cell.setAttribute('aria-label', `Cell ${cell.id}, empty`);
+    });
+
+    msg.classList.remove('winner', 'stalemate');
+    updateMessage();
+
+    // Re-enable and reset AI toggle
+    aiToggle.disabled = false;
+    aiToggle.style.opacity = 1;
+    aiToggle.style.cursor = 'pointer';
+    aiToggle.innerHTML = "Play against AI";
+
+    // If AI goes first in the new game
+    if (game.isAiMode && game.turn !== game.humanPlayer) {
+        triggerAiMove();
+    }
 };
