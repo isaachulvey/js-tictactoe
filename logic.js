@@ -1,3 +1,9 @@
+const WINNING_COMBINATIONS = [
+    ['1', '2', '3'], ['4', '5', '6'], ['7', '8', '9'], // Rows
+    ['1', '4', '7'], ['2', '5', '8'], ['3', '6', '9'], // Cols
+    ['1', '5', '9'], ['3', '5', '7']                // Diagonals
+];
+
 export class TicTacToe {
     constructor() {
         this.board = new Map([
@@ -65,15 +71,15 @@ export class TicTacToe {
     }
 
     checkWinner() {
-        const winningCombinations = [
-            ['1', '2', '3'], ['4', '5', '6'], ['7', '8', '9'], // Rows
-            ['1', '4', '7'], ['2', '5', '8'], ['3', '6', '9'], // Cols
-            ['1', '5', '9'], ['3', '5', '7']                // Diagonals
-        ];
+        // Optimization: A win is impossible before 5 moves
+        if (this.moves < 5) return null;
 
-        for (const combo of winningCombinations) {
-            if (this.board.get(combo[0]) === this.board.get(combo[1]) &&
-                this.board.get(combo[0]) === this.board.get(combo[2])) {
+        for (const combo of WINNING_COMBINATIONS) {
+            const val0 = this.board.get(combo[0]);
+            // Optimization: Cache first value and ensure it's a player mark ('X' or 'O')
+            if ((val0 === 'X' || val0 === 'O') &&
+                val0 === this.board.get(combo[1]) &&
+                val0 === this.board.get(combo[2])) {
                 return combo;
             }
         }
